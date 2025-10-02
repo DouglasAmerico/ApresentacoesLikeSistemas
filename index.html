@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Projetos - Like Sistemas</title>
+    <link rel="icon" href="like_sistemas_logo.jpeg">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* Adiciona rolagem suave para os links de âncora */
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -16,41 +22,84 @@
             flex-direction: column;
             min-height: 100vh;
         }
+
+        /* --- CABEÇALHO ATUALIZADO --- */
         header {
             background-color: #007bff;
             color: white;
-            padding: 15px 20px;
-            text-align: center;
+            padding: 10px 30px; /* Ajuste no padding */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex; /* Habilita Flexbox */
+            justify-content: space-between; /* Alinha itens nas extremidades */
+            align-items: center; /* Alinha verticalmente */
+            flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
         }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-icon {
+            height: 40px; /* Tamanho do ícone */
+            margin-right: 15px; /* Espaço entre o ícone e o texto */
+        }
+
+        .header-left h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .header-left p {
+            margin: 0;
+            margin-left: 2px;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .header-title-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        /* Estilo para a navegação */
+        header nav ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            gap: 25px; /* Espaçamento entre os links */
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            transition: opacity 0.3s ease;
+        }
+
+        header nav a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        /* --- FIM DAS ATUALIZAÇÕES DO CABEÇALHO --- */
+
         .container {
             flex: 1;
             padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
             max-width: 1200px;
             margin: 20px auto;
         }
 
-        /* Ajuste do layout para os cards */
         .grid-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
-            margin-bottom: 20px; /* Espaçamento entre as seções */
+            margin-bottom: 20px; 
         }
-        /* Para as seções de baixo (relatórios e melhorias) */
-        .grid-section.full-width {
-            grid-template-columns: 1fr 1fr; /* Duas colunas para os cards de baixo */
-        }
-         @media (max-width: 768px) {
-            .grid-section.full-width {
-                grid-template-columns: 1fr; /* Uma coluna em telas menores */
-            }
-        }
-
-
+        
         .card {
             background-color: #fff;
             border-radius: 8px;
@@ -72,7 +121,6 @@
             padding-bottom: 10px;
         }
 
-        /* Estilos para os itens da lista que serão expansíveis */
         .collapsible-item {
             background-color: #e9f7fe;
             margin-bottom: 8px;
@@ -92,14 +140,13 @@
             background-color: #ffe6e6;
         }
         .collapsible-item.status-em-desenvolvimento {
-            border-left: 4px solid #ffc107; /* Amarelo/Laranja para em desenvolvimento */
+            border-left: 4px solid #ffc107;
             background-color: #fff8e1;
         }
         .collapsible-item.status-em-planejamento {
-            border-left: 4px solid #6c757d; /* Cinza para planejamento */
+            border-left: 4px solid #6c757d;
             background-color: #e9ecef;
         }
-
 
         .collapsible-item-header {
             padding: 10px 15px;
@@ -119,7 +166,7 @@
             color: #a02a3a;
         }
         .collapsible-item.status-em-desenvolvimento .collapsible-item-header {
-            color: #b38f00; /* Cor mais escura para o texto */
+            color: #b38f00;
         }
         .collapsible-item.status-em-planejamento .collapsible-item-header {
             color: #495057;
@@ -141,7 +188,6 @@
             background-color: #dee2e6;
         }
 
-
         .toggle-icon {
             font-size: 0.9em;
             transition: transform 0.3s ease;
@@ -156,16 +202,20 @@
             overflow: hidden;
             transition: max-height 0.4s ease-out, padding 0.4s ease-out;
             font-size: 0.95em;
-            color: #777;
-            line-height: 1.5;
+            color: #555; /* Cor do texto ajustada para melhor leitura */
+            line-height: 1.6;
         }
+        .collapsible-item-content ul {
+            padding-left: 20px;
+        }
+
         .collapsible-item-content.active {
-            max-height: 500px; /* Um valor grande o suficiente para o conteúdo */
+            max-height: 500px;
             padding-top: 5px;
         }
-        .collapsible-item-content p, .collapsible-item-content ul {
+        .collapsible-item-content p {
             margin-bottom: 0;
-            margin-top: 0;
+            margin-top: 10px;
         }
 
         .chart-container {
@@ -187,15 +237,27 @@
 </head>
 <body>
     <header>
-        <h1>Painel de Gerenciamento de Projetos</h1>
-        <p>Like Sistemas</p>
+        <div class="header-left">
+            <img src="like_sistemas_logo.jpeg" alt="Ícone de Painel" class="header-icon">
+            <div class="header-title-block">
+                <h1>Painel de Gerenciamento de Projetos</h1>
+                <p>Like Sistemas</p>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#tarefas-desenvolvidas">Concluídas</a></li>
+                <li><a href="#tarefas-futuras">Pendentes</a></li>
+                <li><a href="#relatorio-sprints">Sprints</a></li>
+                <li><a href="#implementacoes-melhorias">Melhorias</a></li>
+            </ul>
+        </nav>
     </header>
 
     <div class="container">
-        <!-- Primeira linha de cards: Tarefas Desenvolvidas e Tarefas Desenvolvendo e a Serem Desenvolvidas -->
         <div class="grid-section">
             <div class="card">
-                <h2>Tarefas Desenvolvidas</h2>
+                <h2 id="tarefas-desenvolvidas">Tarefas Desenvolvidas</h2>
                 <div class="chart-container">
                     <canvas id="tarefasDesenvolvidasChart"></canvas>
                 </div>
@@ -218,7 +280,7 @@
                         </div>
                         <div class="collapsible-item-content">
                             <p><strong>Implementação:</strong> A funcionalidade de transferência de itens entre filiais foi adicionada.</p>
-                            <p><strong>Escopo:</strong> A funcionalidade está agora disponível em módulos de venda que anteriormente não a suportavam: **Vendas Disk**, **Balcão** e **PDV**, permitindo a movimentação de itens entre diferentes unidades.</p>
+                            <p><strong>Escopo:</strong> A funcionalidade está agora disponível em módulos de venda que anteriormente não a suportavam: Vendas Disk, Balcão e PDV, permitindo a movimentação de itens entre diferentes unidades.</p>
                         </div>
                     </li>
                     <li class="collapsible-item status-concluido">
@@ -228,7 +290,7 @@
                         </div>
                         <div class="collapsible-item-content">
                             <p><strong>Ação:</strong> Foi realizada uma limpeza (correção de problemas/bugs) na tela de sincronização de produtos.</p>
-                            <p><strong>Escopo:</strong> Tela de sincronização entre o sistema **EiChefe Gestão** e a plataforma **iFood**, garantindo a integridade dos dados.</p>
+                            <p><strong>Escopo:</strong> Tela de sincronização entre o sistema EiChefe Gestão e a plataforma iFood, garantindo a integridade dos dados.</p>
                         </div>
                     </li>
                     <li class="collapsible-item status-concluido">
@@ -237,7 +299,7 @@
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Motivação:</strong> Clientes que utilizam o iFood precisam vincular produtos com estruturas de **complementos montados na plataforma iFood**.</p>
+                            <p><strong>Motivação:</strong> Clientes que utilizam o iFood precisam vincular produtos com estruturas de complementos montados na plataforma iFood.</p>
                             <p><strong>Plano de Ação:</strong> Análise de viabilidade seguida de desenvolvimento.</p>
                             <p><strong>Status:</strong> Concluído (Testado e Finalizado).</p>
                         </div>
@@ -248,8 +310,8 @@
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Implementação:</strong> Inclusão da **visualização "Kanban"** para melhor controle dos pedidos.</p>
-                            <p><strong>Escopo:</strong> Pedidos de **Delivery (Disk Entrega) ativos** nos módulos **Terminal Gerente** e **EiChefe Microterminal**. Essencial para um melhor controle e gestão de fluxo de pedidos de alto volume. Testado e Finalizado.</p>
+                            <p><strong>Implementação:</strong> Inclusão da visualização "Kanban" para melhor controle dos pedidos.</p>
+                            <p><strong>Escopo:</strong> Pedidos de Delivery (Disk Entrega) ativos nos módulos Terminal Gerente e EiChefe Microterminal. Essencial para um melhor controle e gestão de fluxo de pedidos de alto volume. Testado e Finalizado.</p>
                         </div>
                     </li>
                     <li class="collapsible-item status-concluido">
@@ -259,8 +321,8 @@
                         </div>
                         <div class="collapsible-item-content">
                             <p><strong>Problema:</strong> Clientes não clicam em "Sim" quando uma atualização é oferecida.</p>
-                            <p><strong>Objetivo:</strong> Criar a opção de o sistema executar uma **atualização silenciosa** (sem intervenção do usuário).</p>
-                            <p><strong>Aplicações com Atualização Silenciosa Implementada:</strong> **EiChefe Sync**, **EiChefe Painel**, **EiChefe Whatsapp**, **Projeto Nf-e App**, **EiChefe Impressão** e **EiChefe Microterminal**.</p>
+                            <p><strong>Objetivo:</strong> Criar a opção de o sistema executar uma atualização silenciosa (sem intervenção do usuário).</p>
+                            <p><strong>Aplicações com Atualização Silenciosa Implementada:</strong> EiChefe Sync, EiChefe Painel, EiChefe Whatsapp, Projeto Nf-e App, EiChefe Impressão e EiChefe Microterminal.</p>
                             <p><strong>Status:</strong> Grande parte das tarefas filhas estão Testadas e Finalizadas.</p>
                         </div>
                     </li>
@@ -270,8 +332,8 @@
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Funcionalidade:</strong> Implementar o **envio automático de notificações** via EiChefe WhatsApp.</p>
-                            <p><strong>Notificações:</strong> Envio de mensagem quando o **pedido saiu para entrega** e quando o **pedido está pronto para a retirada**.</p>
+                            <p><strong>Funcionalidade:</strong> Implementar o envio automático de notificações via EiChefe WhatsApp.</p>
+                            <p><strong>Notificações:</strong> Envio de mensagem quando o pedido saiu para entrega e quando o pedido está pronto para a retirada.</p>
                             <p><strong>Status:</strong> Concluído (Testado e Finalizado).</p>
                         </div>
                     </li>
@@ -281,8 +343,8 @@
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Funcionalidade:</strong> Desenvolvimento de um **Terminal Completo de Controle de Cozinha** (KDS - *Kitchen Display System*).</p>
-                            <p><strong>Motivação/Modelo:</strong> O design e a operação são inspirados no modelo KDS, visando aprimorar o fluxo de produção, controle de *timing* e gestão visual dos pedidos na cozinha.</p>
+                            <p><strong>Funcionalidade:</strong> Desenvolvimento de um Terminal Completo de Controle de Cozinha (KDS - <em>Kitchen Display System</em>).</p>
+                            <p><strong>Motivação/Modelo:</strong> O design e a operação são inspirados no modelo KDS, visando aprimorar o fluxo de produção, controle de <em>timing</em> e gestão visual dos pedidos na cozinha.</p>
                             <p><strong>Status:</strong> Concluído.</p>
                         </div>
                     </li>
@@ -290,7 +352,7 @@
             </div>
 
             <div class="card">
-                <h2>Tarefas Desenvolvendo e a Serem Desenvolvidas</h2>
+                <h2 id="tarefas-futuras">Tarefas Desenvolvendo e a Serem Desenvolvidas</h2>
                 <div class="chart-container">
                     <canvas id="tarefasADesenvolverChart"></canvas>
                 </div>
@@ -301,9 +363,9 @@
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Status:</strong> **EM DESENVOLVIMENTO**.</p>
+                            <p><strong>Status:</strong> EM DESENVOLVIMENTO.</p>
                             <p><strong>Objetivo:</strong> Melhorar a forma como o nome dos produtos, complementos e combos são exibidos, garantindo clareza e padronização.</p>
-                            <p><strong>Escopo:</strong> **Terminal KDS**, **Impressões** (comandas e *tickets*) e **Tela de Venda**.</p>
+                            <p><strong>Escopo:</strong> Terminal KDS, Impressões (comandas e <em>tickets</em>) e Tela de Venda.</p>
                         </div>
                     </li>
                     <li class="collapsible-item status-em-planejamento">
@@ -312,8 +374,8 @@
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Status:</strong> **EM PLANEJAMENTO**.</p>
-                            <p><strong>Objetivo:</strong> Integrar o pagamento via **PIX** nos módulos de **Cardápio Digital** e **Autoatendimento**.</p>
+                            <p><strong>Status:</strong> EM PLANEJAMENTO.</p>
+                            <p><strong>Objetivo:</strong> Integrar o pagamento via PIX nos módulos de Cardápio Digital e Autoatendimento.</p>
                             <p><strong>Detalhes da Implementação:</strong> PIX Automático (Sicredi) e PIX Manual (QR Code/Copia e Cola com ID de conciliação).</p>
                         </div>
                     </li>
@@ -323,8 +385,8 @@
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Status:</strong> **EM PLANEJAMENTO**.</p>
-                            <p><strong>Objetivo:</strong> Garantir o envio automático de notificações de status ("Saiu para entrega" e "Pronto") pelo **EiChefe WhatsApp** para pedidos que começaram lá, mas foram finalizados no Cardápio Digital (CD).</p>
+                            <p><strong>Status:</strong> EM PLANEJAMENTO.</p>
+                            <p><strong>Objetivo:</strong> Garantir o envio automático de notificações de status ("Saiu para entrega" e "Pronto") pelo EiChefe WhatsApp para pedidos que começaram lá, mas foram finalizados no Cardápio Digital (CD).</p>
                         </div>
                     </li>
                     <li class="collapsible-item status-em-planejamento">
@@ -333,9 +395,9 @@
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Status:</strong> **EM PLANEJAMENTO**.</p>
-                            <p><strong>Objetivo:</strong> Implementar a funcionalidade de geração de **links personalizados** e seus respectivos **QR Codes** que **embutem a informação da mesa** (referência), para autoatendimento.</p>
-                            <p><strong>Escopo:</strong> Sistemas **CD (Cardápio Digital)** e **Gestão**.</p>
+                            <p><strong>Status:</strong> EM PLANEJAMENTO.</p>
+                            <p><strong>Objetivo:</strong> Implementar a funcionalidade de geração de links personalizados e seus respectivos QR Codes que embutem a informação da mesa (referência), para autoatendimento.</p>
+                            <p><strong>Escopo:</strong> Sistemas CD (Cardápio Digital) e Gestão.</p>
                         </div>
                     </li>
                     <li class="collapsible-item status-em-planejamento">
@@ -344,18 +406,18 @@
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Status:</strong> **EM PLANEJAMENTO**.</p>
-                            <p><strong>Objetivo:</strong> Tornar mais fácil para o usuário **resolver o problema de sincronização** de produtos de *Apps externos* diretamente pelo **EiChefe Painel** no momento em que o pedido é recebido.</p>
+                            <p><strong>Status:</strong> EM PLANEJAMENTO.</p>
+                            <p><strong>Objetivo:</strong> Tornar mais fácil para o usuário resolver o problema de sincronização de produtos de <em>Apps externos</em> diretamente pelo EiChefe Painel no momento em que o pedido é recebido.</p>
                         </div>
                     </li>
-                    <li class="collapsible-item status-concluido"> <!-- Ajustado para concluído pois está no escopo estendido do EPIC anterior -->
+                    <li class="collapsible-item status-concluido"> 
                         <div class="collapsible-item-header">
                             <span>EPIC: Realizar Atualização Silenciosa dos Aplicativos em Java (Escopo Estendido: Balança e Bina Desktop)</span>
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Status:</strong> **Concluído** (como parte da grande parte das tarefas filhas já finalizadas do EPIC maior).</p>
-                            <p><strong>Objetivo:</strong> Implementar a atualização silenciosa nos aplicativos **EiChefe Balança** e **Bina Desktop**.</p>
+                            <p><strong>Status:</strong> Concluído (como parte da grande parte das tarefas filhas já finalizadas do EPIC maior).</p>
+                            <p><strong>Objetivo:</strong> Implementar a atualização silenciosa nos aplicativos EiChefe Balança e Bina Desktop.</p>
                         </div>
                     </li>
                     <li class="collapsible-item status-em-planejamento">
@@ -364,12 +426,12 @@
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Status:</strong> **EM PLANEJAMENTO**.</p>
+                            <p><strong>Status:</strong> EM PLANEJAMENTO.</p>
                             <p><strong>Objetivo Geral:</strong> Transformar a máquina de pagamentos Clover em uma solução de vendas e recebimento integrada.</p>
                             <p><strong>Fases da Implementação:</strong></p>
                             <ul>
-                                <li><strong>Fase 1 (Pagamentos):</strong> Implementar a integração com o sistema **Clover** para, primeiramente, utilizar apenas a **máquina de pagamentos** (terminal).</li>
-                                <li><strong>Fase 2 (PDV Integrado):</strong> Implementar o aplicativo **EiChefe Garçom** diretamente na maquininha Clover, transformando-a em um **aplicativo de vendas móvel completo** (PDV/comanda).</li>
+                                <li><strong>Fase 1 (Pagamentos):</strong> Implementar a integração com o sistema Clover para, primeiramente, utilizar apenas a máquina de pagamentos (terminal).</li>
+                                <li><strong>Fase 2 (PDV Integrado):</strong> Implementar o aplicativo EiChefe Garçom diretamente na maquininha Clover, transformando-a em um aplicativo de vendas móvel completo (PDV/comanda).</li>
                             </ul>
                             <p><strong>Benefício Esperado:</strong> Otimização do processo de venda e pagamento no atendimento de mesa e delivery.</p>
                         </div>
@@ -378,63 +440,164 @@
             </div>
         </div>
 
-        <!-- Segunda linha de cards: Relatório de Sprints e Implementações e Melhorias -->
-        <div class="grid-section full-width">
+        <div class="grid-section">
             <div class="card">
-                <h2>Relatório dos Últimos Sprints</h2>
+                 <h2 id="relatorio-sprints">Relatório dos Últimos Sprints</h2>
                 <div class="chart-container">
                     <canvas id="sprintsReportChart"></canvas>
                 </div>
                 <ul>
                     <li class="collapsible-item">
                         <div class="collapsible-item-header">
-                            <span>Sprint 12 (01/05 - 15/05)</span>
+                            <span>Sprint 2025-S25</span>
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Features Entregues:</strong> 5 - Foco em melhorias de usabilidade e pequenas integrações no Cardápio Digital.</p>
-                            <p><strong>Bugs Corrigidos:</strong> 2 - Correções prioritárias de performance e estabilidade nos módulos de venda.</p>
-                            <p><strong>Velocidade:</strong> 25 pontos - Mantendo um ritmo constante de entregas, com boa previsibilidade.</p>
+                            <p><strong>Período:</strong> 23/06/2025 a 30/06/2025</p>
+                            <p><strong>Progresso:</strong> 28% das tarefas concluídas.</p>
                         </div>
                     </li>
                     <li class="collapsible-item">
                         <div class="collapsible-item-header">
-                            <span>Sprint 13 (16/05 - 30/05)</span>
+                            <span>Sprint 2025-S26</span>
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Features Entregues:</strong> 4 - Conclusão de funcionalidades relacionadas ao fluxo de cozinha e otimização de pedidos.</p>
-                            <p><strong>Bugs Corrigidos:</strong> 1 - Correção pontual em módulo de vendas, sem impacto crítico.</p>
-                            <p><strong>Velocidade:</strong> 20 pontos - Impactada pela complexidade e dependências de novas funcionalidades, resultando em menor velocidade.</p>
+                            <p><strong>Período:</strong> 30/06/2025 a 07/07/2025</p>
+                            <p><strong>Progresso:</strong> 27% das tarefas concluídas.</p>
+                        </div>
+                    </li>
+                     <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Sprint 2025-S27</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p><strong>Período:</strong> 07/07/2025 a 14/07/2025</p>
+                            <p><strong>Progresso:</strong> 32% das tarefas concluídas.</p>
+                        </div>
+                    </li>
+                     <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Sprint 2025-S28</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p><strong>Período:</strong> 14/07/2025 a 21/07/2025</p>
+                            <p><strong>Progresso:</strong> 31% das tarefas concluídas.</p>
+                        </div>
+                    </li>
+                     <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Sprint 2025-S29</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p><strong>Período:</strong> 21/07/2025 a 28/07/2025</p>
+                            <p><strong>Progresso:</strong> 21% das tarefas concluídas.</p>
+                        </div>
+                    </li>
+                     <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Sprint 2025-S30</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p><strong>Período:</strong> 28/07/2025 a 04/08/2025</p>
+                            <p><strong>Progresso:</strong> 28% das tarefas concluídas.</p>
+                        </div>
+                    </li>
+                    <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Sprint 2025-S31</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p><strong>Período:</strong> 04/08/2025 a 11/08/2025</p>
+                            <p><strong>Progresso:</strong> 25% das tarefas concluídas.</p>
+                        </div>
+                    </li>
+                    <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Sprint 2025-S32-33</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p><strong>Período:</strong> 12/08/2025 a 26/08/2025</p>
+                            <p><strong>Progresso:</strong> 43% das tarefas concluídas.</p>
+                        </div>
+                    </li>
+                    <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Sprint 2025-S34-35</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p><strong>Período:</strong> 26/08/2025 a 08/09/2025</p>
+                            <p><strong>Progresso:</strong> 41% das tarefas concluídas.</p>
+                        </div>
+                    </li>
+                    <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Sprint 2025-S36-37</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p><strong>Período:</strong> 09/09/2025 a 22/09/2025</p>
+                            <p><strong>Progresso:</strong> 49% das tarefas concluídas.</p>
+                        </div>
+                    </li>
+                    <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Sprint 2025-S38-39</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p><strong>Período:</strong> 23/09/2025 a 06/10/2025</p>
+                            <p><strong>Progresso:</strong> 42% das tarefas concluídas até o momento.</p>
                         </div>
                     </li>
                 </ul>
-                <p class="detail"><i>Os gráficos acima ilustram o desempenho e a progressão das entregas ao longo dos últimos ciclos.</i></p>
+                <p class="detail"><i>O gráfico acima ilustra o desempenho percentual das entregas ao longo dos últimos ciclos.</i></p>
             </div>
 
             <div class="card">
-                <h2>Implementações e Melhorias</h2>
+                <h2 id="implementacoes-melhorias">Implementações e Melhorias</h2>
                 <ul>
                     <li class="collapsible-item">
                         <div class="collapsible-item-header">
-                            <span>Fluxo Organizacional do Desenvolvimento</span>
+                            <span>Ajuste na Duração da Sprint</span>
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Introdução de Revisão de Código Obrigatória:</strong> Assegura maior qualidade, padronização e identificação precoce de possíveis falhas no código-fonte antes da integração.</p>
-                            <p><strong>Automação de Testes de Integração:</strong> Reduz o tempo de detecção de erros e garante a compatibilidade e o bom funcionamento entre os diversos módulos do sistema.</p>
-                            <p><strong>Workshops de Boas Práticas (Mensal):</strong> Realização de sessões de capacitação contínua para a equipe, focando em padrões de desenvolvimento, novas tecnologias e aprimoramento de habilidades.</p>
+                            <p>O ciclo de desenvolvimento foi ajustado de <strong>7 para 15 dias</strong>, permitindo um planejamento mais robusto e tempo hábil para desenvolvimento e testes aprofundados.</p>
                         </div>
                     </li>
                     <li class="collapsible-item">
                         <div class="collapsible-item-header">
-                            <span>Controle de Projetos da Like Sistemas</span>
+                            <span>Otimização do Ciclo de Vida das Tarefas</span>
                             <span class="toggle-icon">&#9660;</span>
                         </div>
                         <div class="collapsible-item-content">
-                            <p><strong>Padronização de Templates de Documentação:</strong> Facilita a criação e manutenção de documentação técnica e de usuário, tornando-a mais consistente, clara e acessível.</p>
-                            <p><strong>Métricas de Desempenho (KPIs) Atualizadas:</strong> Definição e acompanhamento de indicadores-chave de desempenho para monitorar a eficiência, o progresso e o sucesso dos projetos.</p>
-                            <p><strong>Integração com Ferramenta de Gerenciamento (Jira/Trello):</strong> Otimização do fluxo de trabalho, rastreamento de tarefas e comunicação entre as equipes, proporcionando maior visibilidade do projeto e controle de prazos.</p>
+                            <p>O processo foi reorganizado para incentivar que cada tarefa seja iniciada e finalizada dentro da mesma sprint, aumentando a previsibilidade e a entrega de valor contínuo.</p>
+                        </div>
+                    </li>
+                    <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Nova Estratégia de Branches (Master/Develop)</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p>Para o EiChefe Gestão, dividimos o fluxo nas branches <strong>Master</strong> (versão estável) e <strong>Develop</strong> (versão de desenvolvimento). Isso garante maior estabilidade no ambiente de produção e permite que novas funcionalidades sejam validadas em clientes selecionados antes do lançamento geral.</p>
+                        </div>
+                    </li>
+                    <li class="collapsible-item">
+                        <div class="collapsible-item-header">
+                            <span>Implementação de Testes de Desempenho</span>
+                            <span class="toggle-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-item-content">
+                            <p>Uma nova rotina de testes com foco em performance será implementada para garantir a escalabilidade e a fluidez de nossas aplicações, mesmo sob alta demanda.</p>
                         </div>
                     </li>
                 </ul>
@@ -444,14 +607,14 @@
     </div>
 
     <footer>
-        <p>&copy; 2023 Like Sistemas. Todos os direitos reservados.</p>
+        <p>&copy; 2025 Like Sistemas. Todos os direitos reservados.</p>
     </footer>
 
     <script>
         // Dados para os gráficos
-        const totalTarefasConcluidas = 8; // Conforme a lista atualizada
+        const totalTarefasConcluidas = 8; 
         const totalTarefasEmDesenvolvimento = 1;
-        const totalTarefasEmPlanejamento = 5; // A "Atualização Silenciosa" estendida agora está no card de Desenvolvidas
+        const totalTarefasEmPlanejamento = 5; 
 
         const tarefasDesenvolvidasData = {
             labels: ['Concluídas'],
@@ -465,29 +628,22 @@
         const tarefasADesenvolverData = {
             labels: ['Em Desenvolvimento', 'Em Planejamento', 'Concluídas (do escopo estendido)'],
             datasets: [{
-                data: [totalTarefasEmDesenvolvimento, totalTarefasEmPlanejamento, 1], /* A tarefa de atualização silenciosa estendida */
+                data: [totalTarefasEmDesenvolvimento, totalTarefasEmPlanejamento, 1],
                 backgroundColor: ['#ffc107', '#6c757d', '#28a745'],
                 hoverOffset: 4
             }]
         };
 
+        // DADOS DO GRÁFICO DE SPRINTS ATUALIZADOS
         const sprintsReportData = {
-            labels: ['Sprint 11', 'Sprint 12', 'Sprint 13'],
+            labels: ['S25', 'S26', 'S27', 'S28', 'S29', 'S30', 'S31', 'S32-33', 'S34-35', 'S36-37', 'S38-39'],
             datasets: [{
-                label: 'Features Entregues',
-                data: [6, 5, 4],
+                label: 'Tarefas Concluídas (%)',
+                data: [28, 27, 32, 31, 21, 28, 25, 43, 41, 49, 42],
                 backgroundColor: 'rgba(0, 123, 255, 0.5)',
                 borderColor: '#007bff',
-                borderWidth: 1,
-                fill: false,
-                tension: 0.3
-            }, {
-                label: 'Bugs Corrigidos',
-                data: [3, 2, 1],
-                backgroundColor: 'rgba(220, 53, 69, 0.5)',
-                borderColor: '#dc3545',
-                borderWidth: 1,
-                fill: false,
+                borderWidth: 2,
+                fill: true,
                 tension: 0.3
             }]
         };
@@ -524,13 +680,14 @@
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Quantidade'
+                        // TÍTULO DO EIXO Y ATUALIZADO
+                        text: 'Percentual Concluído (%)'
                     }
                 }
             }
         };
 
-        // Função para renderizar os gráficos (chamada apenas uma vez após o DOM carregar)
+        // Função para renderizar os gráficos
         const renderedCharts = {};
 
         function renderChart(chartId, type, data, options) {
@@ -545,7 +702,6 @@
 
         // Lógica de Acordeão para os itens da lista
         document.addEventListener('DOMContentLoaded', () => {
-            // Renderiza todos os gráficos inicialmente
             renderChart('tarefasDesenvolvidasChart', 'pie', tarefasDesenvolvidasData, pieChartOptions);
             renderChart('tarefasADesenvolverChart', 'doughnut', tarefasADesenvolverData, pieChartOptions);
             renderChart('sprintsReportChart', 'line', sprintsReportData, lineChartOptions);
@@ -556,14 +712,14 @@
                 header.addEventListener('click', () => {
                     const currentContent = header.nextElementSibling;
                     const isActive = header.classList.contains('active');
-
+                    
                     const parentUl = header.closest('ul');
                     if (parentUl) {
                         parentUl.querySelectorAll('.collapsible-item-header.active').forEach(activeHeader => {
                             if (activeHeader !== header) {
                                 activeHeader.classList.remove('active');
                                 activeHeader.nextElementSibling.classList.remove('active');
-                                activeHeader.nextElementSibling.style.maxHeight = "0"; // Fecha o conteúdo
+                                activeHeader.nextElementSibling.style.maxHeight = "0";
                             }
                         });
                     }
